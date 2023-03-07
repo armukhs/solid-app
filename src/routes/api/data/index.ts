@@ -1,18 +1,12 @@
-import { json } from "solid-start"
+import { D1Database } from "@cloudflare/workers-types"
+import { APIEvent, json } from "solid-start"
 import { items } from "~/data"
 import { getConnection } from "~/utils"
 
-export async function GET() {
+export async function GET({ env }: APIEvent) {
   const start = new Date().getTime()
-  const conn = getConnection()
-  const sql = `SELECT * FROM countrycode`
-  console.log(conn)
-  // const rs = await conn.execute(sql)
-  // return json({
-  //   db: Math.ceil(rs.time),
-  //   worker: new Date().getTime() - start,
-  //   rows: rs.size,
-  //   data: rs.rows,
-  // })
-  return json(items)
+  const { COUNTRIES } = (env as { COUNTRIES: D1Database })
+  const rs = await COUNTRIES.prepare('SELECT * FROM countrycode').first()
+  // console.log(rs)
+  return json(rs)
 }
