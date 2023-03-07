@@ -1,7 +1,5 @@
 import { D1Database } from "@cloudflare/workers-types"
 import { APIEvent, json } from "solid-start"
-import { items } from "~/data"
-import { getConnection } from "~/utils"
 
 export async function GET({ env }: APIEvent) {
   const start = new Date().getTime()
